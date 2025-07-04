@@ -13,7 +13,7 @@ jobs:
 
       - name: Install dependencies
         run: |
-          sudo pacman -Sy --noconfirm base-devel git
+          sudo apt -Sy --noconfirm base-devel git
 
       - name: Setup SSH for AUR
         uses: webfactory/ssh-agent@v0.9.1
