@@ -16,7 +16,7 @@ jobs:
           sudo pacman -Sy --noconfirm base-devel git
 
       - name: Setup SSH for AUR
-        uses: webfactory/ssh-agent@v0.8.1
+        uses: webfactory/ssh-agent
         with:
           ssh-private-key: ${{ secrets.AUR_SSH_PRIVATE_KEY }}
 
