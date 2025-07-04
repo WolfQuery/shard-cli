@@ -1,7 +1,3 @@
-Sure! Here’s an updated **README.md** reflecting your current features and design:
-
----
-
 # Shard CLI
 
 **A CLI note-taking tool inspired by Zettelkasten, designed for terminal users and Linux setups.**
