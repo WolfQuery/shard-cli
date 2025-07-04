@@ -1,78 +1,98 @@
-# 🧩 Shard
-
-**Shard** is a terminal companion for your `Obsidian.md` vault.  
-Quickly create notes, access daily entries, search, and push your vault to Git – all from the command line.
+Sure! Here’s an updated **README.md** reflecting your current features and design:
 
 ---
 
-## 🚀 Features
+# Shard CLI
 
-- 📄 Create new notes with frontmatter
-- 📅 Manage daily notes
-- 🔍 Search notes by title
-- 🏷️ List tags across your vault
-- ⛓️ View backlinks to any note
-- ☁️ Push changes to a Git repo with one command
+**A CLI note-taking tool inspired by Zettelkasten, designed for terminal users and Linux setups.**
 
 ---
 
-## 📦 Installation
+## Features
 
-### Using pip (via PyPI):
+* Create Markdown notes with automatic unique IDs based on customizable date/time formats
+* Notes named by their titles (slugified) for easy navigation
+* Assign notes to user-configurable "kasten" collections (e.g., inbox, literature notes, etc.)
+* Add tags and backlinks (links to other notes by ID, tag, or title)
+* Customizable config for:
+
+  * Vault path (where notes are stored)
+  * Date/time format for note IDs and timestamps
+  * Kasten collections with numeric IDs and names
+  * Preferred terminal text editor command to open notes (e.g., `vim`, `nano`, `tini`)
+* Automatic creation of config file on first run, cross-platform (`~/.config/shard-cli/config.toml` on Unix, app data folder on Windows)
+* Simple Git integration planned (e.g., `shard push` to commit & push changes)
+* Designed for efficient Zettelkasten workflows but flexible for any note organization
+
+---
+
+## Installation
+
+Install via PyPI:
 
 ```bash
-pip install shard
-````
+pip install shard-cli
+```
 
-### Using Poetry (local development):
+[NOT YET IMPLEMENTED] Or from AUR (Arch Linux User Repository):
 
 ```bash
-git clone https://codeberg.org/WolfQuery/shard
-cd shard
-poetry install
+yay -S shard-cli
 ```
 
 ---
 
-## 🔧 Usage
+## Usage
+
+### Create a new note
 
 ```bash
-shard new "My Project Idea" --tags project,cli
-shard daily
-shard search "zettel"
-shard tags
-shard backlinks zettelkasten.md
-shard push
+shard new "My Note Title" -t biology,chemistry -k 1 -l tag1,1234,OtherNote
 ```
 
-You can also pass a custom commit message:
+Options:
 
-```bash
-shard push -m "added new zettel on memory systems"
+* `-t`, `--tags`: Comma-separated list of tags
+* `-k`, `--kasten`: Numeric ID of the kasten collection
+* `-l`, `--links`: Comma-separated list of linked note IDs, tags, or note titles
+
+### Config file
+
+The config file is automatically created on first run at:
+
+* Unix: `~/.config/shard-cli/config.toml`
+* Windows: `%APPDATA%\shard-cli\config.toml`
+
+Example config snippet:
+
+```toml
+vault_path = "~/zettelkasten"
+editor_cmd = "vim"
+date_format = "%Y%m%d%H%M%S"
+
+[kasten]
+1 = "Inbox"
+2 = "Literature Notes"
+3 = "Permanent Notes"
 ```
 
 ---
 
-## 📂 Vault Setup
+## Planned Features
 
-By default, `shard` looks for your Obsidian vault in `~/vault/`.
-
-You can customize this in a future config file at:
-
-```bash
-~/.config/shard/config.toml
-```
+* Git integration commands (`shard push` etc.) for easy version control and backup
+* Enhanced backlinks visualization and navigation
+* Support for additional note formats and metadata
+* More powerful tagging and filtering capabilities
 
 ---
 
-## 💻 Requirements
+## Contributing
 
-* Python 3.9+
-* Git (installed and initialized in your vault)
-* Optional: `fzf` for fuzzy search
+Contributions, bug reports, and feature requests are welcome! Feel free to open an issue or pull request.
 
 ---
 
-## 📖 License
+## License
 
-CC BY-NC-SA 4.0 © 2025 WolfQuery
+[CC BY-NC-SA 4.0](LICENSE)
