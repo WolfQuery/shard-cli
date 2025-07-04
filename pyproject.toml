@@ -1,19 +1,22 @@
-[tool.poetry]
-name = "shard"
-version = "0.1.0"
-description = "A terminal companion for your Obsidian.md vault"
-authors = ["WolfQuery foxtailoromis@gmail.com"]
-license = "MIT"
-
-[tool.poetry.dependencies]
-python = "^3.9"
-typer = "^0.12.3"
-python-frontmatter = "^1.0"
-rich = "^13.0"
-
-[tool.poetry.scripts]
-shard = "shard.cli:app"
-
 [build-system]
-requires = ["poetry-core"]
-build-backend = "poetry.core.masonry.api"
+requires = ["flit_core >=3.2,<4"]
+build-backend = "flit_core.buildapi"
+
+[project]
+name = "shard-cli"
+version = "0.1.0"
+description = "A CLI note-taking tool inspired by Zettelkasten"
+readme = "README.md"
+requires-python = ">=3.8"
+authors = [
+  { name="WolfQuery", email="foxtailoromis@gmail.com" }
+]
+license = { file = "LICENSE" }
+dependencies = [
+  "typer",
+  "platformdirs",
+  "toml",
+]
+
+[project.scripts]
+shard = "shard.__main__:app"

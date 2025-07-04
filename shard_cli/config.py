@@ -1,3 +1,7 @@
+#############
+# config.py #
+#############
+
 import toml
 from pathlib import Path
 from platformdirs import user_config_dir
@@ -16,7 +20,7 @@ DEFAULT_CONFIG = {
 }
 
 def get_config_path() -> Path:
-    config_dir = Path(user_config_dir("shard", "shard"))
+    config_dir = Path(user_config_dir("shard-cli"))
     config_dir.mkdir(parents=True, exist_ok=True)
     return config_dir / "config.toml"
 
