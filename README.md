@@ -27,7 +27,7 @@ pip install shard
 ### Using Poetry (local development):
 
 ```bash
-git clone https://github.com/WolfQuery/shard
+git clone https://codeberg.org/WolfQuery/shard
 cd shard
 poetry install
 ```
