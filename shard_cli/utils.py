@@ -2,6 +2,9 @@
 # utils.py #
 ############
 
+import re
+from datetime import datetime
+
 def slugify(title: str) -> str:
     title = title.lower()
     title = re.sub(r"\s+", "-", title)

@@ -6,8 +6,10 @@ import typer
 from typing import Optional
 from pathlib import Path
 from datetime import datetime
-from shard.utils import slugify, generate_note_id
-import re
+from shard_cli.utils import slugify, generate_note_id
+from shard_cli.config import load_config
+import subprocess
+import shlex
 
 app = typer.Typer()
 
@@ -20,9 +22,8 @@ def new(
     kasten: Optional[int] = typer.Option(None, "--kasten", "-k", help="Kasten ID"),
     links: Optional[str] = typer.Option(None, "--links", "-l", help="Comma-separated linked note IDs or names"),
 ):
-    # Load your config here (or pass it in)
-    from shard.config import load_or_create_config
-    config = load_or_create_config()
+    
+    config = load_config()
 
     # Parse flags
     tags_list = tags.split(",") if tags else []
@@ -53,6 +54,11 @@ def new(
     note_path.write_text(content)
 
     typer.echo(f"Created note: {note_path}")
+
+    # --- Open the note in the user's editor ---
+    editor_cmd = config.get("editor_cmd", "nano")
+    cmd = shlex.split(editor_cmd) + [str(note_path)]
+    subprocess.Popen(cmd)
 
 if __name__ == "__main__":
     app()
