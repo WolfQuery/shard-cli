@@ -4,7 +4,7 @@ build-backend = "flit_core.buildapi"
 
 [project]
 name = "shard-cli"
-version = "1.0.5"
+version = "0.1.5"
 description = "A CLI note-taking tool inspired by Zettelkasten"
 readme = "README.md"
 requires-python = ">=3.8"
