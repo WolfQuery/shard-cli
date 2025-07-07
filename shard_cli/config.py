@@ -10,7 +10,7 @@ DEFAULT_CONFIG = {
     "vault_path": "~/zettel",
     "editor_cmd": "nano",
     "general": {
-        "date_format": "%Y%m%d%H%M%S"
+        "date_format": "%d%m%Y-%S%M%H"
     },
     "kasten": {
         "1": "Inbox",

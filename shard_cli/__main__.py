@@ -12,7 +12,7 @@ import typer
 #
 config = load_config()
 print(config["vault_path"])      # pathlib.Path with expanded home
-print(config["editor_cmd"])      # e.g. "nano"
+print(config["editor_cmd"])      # the command that's to be run to open a note (e.g. nano)
 print(config["kasten"])          # dict of kasten ids and names
 print(config["general"]["date_format"])
 
