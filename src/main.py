@@ -1,64 +1,37 @@
+###########
+# main.py #
+###########
+
+
 import typer
 from rich import print
 import subprocess
-import time 
 from pathlib import Path
 from enum import Enum
 
-from config import vault_path, open_cmd, kasten_list, load_config
-
-
+import config
 
 app = typer.Typer()
 
-config.load_config()
-
-vault_path = config.vault_path  # Assuming it's defined in config
-gen_vault_path = Path.home() / (vault_path if vault_path else "Documents/zettel")
-
-Kasten = Enum("Kasten", {name: i + 1 for i, name in enumerate(config.kasten_list)})
-
+# 1) Initialize vault directory from config
+gen_vault_path = config.vault_path
+if not gen_vault_path.is_absolute():
+    # allow relative paths in config
+    gen_vault_path = Path.home() / gen_vault_path
 gen_vault_path.mkdir(parents=True, exist_ok=True)
 
-@app.command()
-def new(
-    name: str,
+# 2) Build Kasten enum once
+Kasten = Enum(
+    "Kasten",
+    {name: i + 1 for i, name in enumerate(config.kasten_list)}
+)
+
+def overwrite_note(
+    path: Path,
     tags: str,
-    kasten: int = typer.Option(1, "--kasten", "-k", help="Zettelkasten category number"),
-    wiki_links: str = typer.Option(None, "--wiki-links", "-w", help="Comma-separated wiki links"),
-    force: bool = typer.Option(False, "--force", "-f", help="Overwrite existing file without prompt")
+    text_kasten: str,
+    wiki_links: str
 ):
-    path: Path = gen_vault_path / f"{name}.md"
-
-
-    try:
-        text_kasten = Kasten(kasten).name
-    except ValueError:
-        raise typer.BadParameter(f"Kasten number '{kasten}' is invalid. Choose one of: {[k.value for k in Kasten]}")
-
-    if not path.exists():
-        overwrite_note()
-
-    elif force:
-        overwrite_note()
-
-    else:
-        print("File with this name already exists. Would you like to edit it? [y/n]")
-        choice = input()
-        while choice.lower != "y" and choice.lower != "n":
-            print("please chooe y [yes] or n [no]")
-            choice = input()
-        if choice.lower == "y":
-            subprocess.run([config.open_cmd, str(path)])
-        else:
-            raise typer.Exit(code=0)
-
-
-
-@app.command
-def remove():
-    
-def overwrite_note():
     path.write_text(f"""\
 ---
 tags: {tags}
@@ -67,6 +40,73 @@ wiki_links: {wiki_links}
 ---
 """)
     subprocess.run([config.open_cmd, str(path)])
+
+
+@app.command()
+def new(
+    name: str = typer.Argument(..., help="Filename without .md"),
+    tags: str = typer.Option(..., "--tags", "-t", help="Comma-separated tags"),
+    kasten: int = typer.Option(
+        1, "--kasten", "-k", help="Zettelkasten category number"
+    ),
+    wiki_links: str = typer.Option(None, "--wiki-links", "-w", help="Comma-separated wiki links"),
+    force: bool = typer.Option(False, "--force", "-f", help="Overwrite without confirmation")
+):
+    path = gen_vault_path / f"{name}-{kasten}.md"
+
+    # Validate kasten number
+    try:
+        text_kasten = Kasten(kasten).name
+    except ValueError:
+        valid = ", ".join(str(k.value) for k in Kasten)
+        raise typer.BadParameter(f"Invalid kasten '{kasten}'. Valid: {valid}")
+
+    # Create or overwrite
+    if not path.exists() or force:
+        overwrite_note(path, tags, text_kasten, wiki_links)
+    else:
+        print(f"[yellow]'{path.name}' exists.[/yellow]")
+        if typer.confirm("Edit anyway?", default=False):
+            subprocess.run([config.open_cmd, str(path)])
+        else:
+            raise typer.Exit()
+
+
+@app.command()
+def open(
+    name: str = typer.Argument(..., help="Filename without .md"),
+    kasten: int = typer.Option(
+        ..., "--kasten", "-k", help="Kasten number (required)"
+    )
+):
+    path = gen_vault_path / f"{name}-{kasten}.md"
+    if path.exists():
+        subprocess.run([config.open_cmd, str(path)])
+    else:
+        typer.secho(f"File not found: {path.name}", fg="red")
+        raise typer.Exit(code=1)
+
+
+@app.command()
+def remove(
+    name: str = typer.Argument(..., help="Filename without .md"),
+    kasten: int = typer.Option(
+        ..., "--kasten", "-k", help="Kasten number (required)"
+    ),
+    force: bool = typer.Option(False, "--force", "-f", help="Skip confirmation")
+):
+    path = gen_vault_path / f"{name}-{kasten}.md"
+    if not path.exists():
+        typer.secho(f"No such file: {path.name}", fg="red")
+        raise typer.Exit(code=1)
+
+    if force or typer.confirm(f"Delete '{path.name}'?", default=False):
+        path.unlink()
+        typer.secho(f"Deleted: {path.name}", fg="green")
+    else:
+        typer.secho("Deletion canceled", fg="yellow")
+        raise typer.Exit()
+
 
 if __name__ == "__main__":
     app()
