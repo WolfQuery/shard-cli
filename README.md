@@ -1,7 +1,4 @@
 # Shard CLI
-[![Publish to AUR](https://github.com/WolfQuery/shard-cli/actions/workflows/aur-publish.yml/badge.svg?branch=main)](https://github.com/WolfQuery/shard-cli/actions/workflows/aur-publish.yml)
-[![Pylint](https://github.com/WolfQuery/shard-cli/actions/workflows/pylint.yml/badge.svg?branch=main)](https://github.com/WolfQuery/shard-cli/actions/workflows/pylint.yml)
-
 **A CLI note-taking tool inspired by Zettelkasten, designed for terminal users and Linux setups.**
 
 ---
