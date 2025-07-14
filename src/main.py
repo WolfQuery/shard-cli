@@ -31,7 +31,7 @@ def overwrite_note(
     tags: str,
     text_kasten: str,
     wiki_links: str,
-    zettel_id: str = datetime.now().strftime("%Y%m%d%H%M")
+    zettel_id: str = datetime.now().strftime("%Y%m%d%H%M%S")
 ):
     path.write_text(f"""\
 ---
