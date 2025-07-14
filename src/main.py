@@ -8,7 +8,7 @@ from rich import print
 import subprocess
 from pathlib import Path
 from enum import Enum
-
+from datetime import datetime
 import config
 
 app = typer.Typer()
@@ -30,13 +30,15 @@ def overwrite_note(
     path: Path,
     tags: str,
     text_kasten: str,
-    wiki_links: str
+    wiki_links: str,
+    zettel_id: str = datetime.now().strftime("%Y%m%d%H%M")
 ):
     path.write_text(f"""\
 ---
 tags: {tags}
 kasten: {text_kasten}
 wiki_links: {wiki_links}
+id: {zettel_id}
 ---
 """)
     subprocess.run([config.open_cmd, str(path)])
