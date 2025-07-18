@@ -2,7 +2,7 @@
 # main.py #
 ###########
 
-
+import re
 import typer
 from rich import print
 import subprocess
@@ -107,8 +107,14 @@ def remove(
         typer.secho(f"Deleted: {path.name}", fg="green")
     else:
         typer.secho("Deletion canceled", fg="yellow")
-        raise typer.Exit()
+ 	raise typer.Exit()
 
+@app.command()
+def find(
+	search_term: str = typer.Argument(..., help="The search term"),
+	amount: int = typer.Option(25, "--amount", "-a", help = "The amount of search results to run for and display")
+):
+subprocess.start[f"grep '{search_term}'"
 
 if __name__ == "__main__":
     app()
